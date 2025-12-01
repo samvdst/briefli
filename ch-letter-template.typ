@@ -13,16 +13,19 @@
   address-position: "left",
   body,
 ) = {
-  // Swiss letter standard measurements
-  // Recipient address window: 22mm from left, 60mm from top, 85.5mm x 25.5mm
-  let address-left = 22mm
+  // Swiss C5 envelope address window measurements (A4 folded once)
+  // Left window:  22mm from left edge, 45mm from top (sender), 60mm from top (recipient)
+  // Right window: 118mm from left edge (same vertical positions)
+  // Address area: 85.5mm × 45mm (fits 5-6 lines)
+  let address-left-pos = 22mm
+  let address-right-pos = 118mm
   let address-top = 60mm
   let address-width = 85.5mm
-  let address-height = 45mm // Extended to fit 5-6 lines
+  let sender-top = 45mm
 
-  // Margins: address-left determines left margin for alignment
-  let margin-left = address-left
-  let margin-right = 20mm
+  // Margins based on address position
+  let margin-left = if address-position == "right" { 20mm } else { address-left-pos }
+  let margin-right = if address-position == "right" { 210mm - address-right-pos - address-width } else { 20mm }
   let margin-top = 20mm
   let margin-bottom = 20mm
 
@@ -59,35 +62,38 @@
   )
 
   // Sender as return address line (small, underlined, above address window)
-  // Positioned at ~45mm from top (above the 60mm address window)
   if sender.name != none or sender.address != none or sender.at("extra", default: none) != none {
-    let sender-align = if address-position == "right" { top + right } else { top + left }
+    let sender-x = if address-position == "right" { address-right-pos } else { address-left-pos }
     place(
-      sender-align,
-      dy: 45mm - margin-top,
-      {
-        set text(size: 8pt)
-        let sender-parts = ()
-        if sender.name != none {
-          sender-parts.push(sender.name)
-        }
-        if sender.address != none {
-          sender-parts.push(sender.address)
-        }
-        if sender.at("extra", default: none) != none {
-          sender-parts.push(sender.extra)
-        }
-        underline(sender-parts.join(" · "))
-      },
+      top + left,
+      dx: sender-x - margin-left,
+      dy: sender-top - margin-top,
+      box(
+        width: address-width,
+        {
+          set text(size: 8pt)
+          let sender-parts = ()
+          if sender.name != none {
+            sender-parts.push(sender.name)
+          }
+          if sender.address != none {
+            sender-parts.push(sender.address)
+          }
+          if sender.at("extra", default: none) != none {
+            sender-parts.push(sender.extra)
+          }
+          underline(sender-parts.join(" · "))
+        },
+      ),
     )
   }
 
-  // Recipient block - absolutely positioned at 60mm from top
-  // This ensures the address appears in the envelope window
+  // Recipient block - absolutely positioned for envelope window
   if recipient != none {
-    let recipient-align = if address-position == "right" { top + right } else { top + left }
+    let recipient-x = if address-position == "right" { address-right-pos } else { address-left-pos }
     place(
-      recipient-align,
+      top + left,
+      dx: recipient-x - margin-left,
       dy: address-top - margin-top,
       box(
         width: address-width,
@@ -103,8 +109,7 @@
     )
   }
 
-  // Content starts after the address window area
-  // Address window ends at ~105mm (60mm top + 45mm height)
+  // Content starts after the address window area (60mm top + 45mm height = 105mm)
   v(105mm - margin-top)
 
   // Place + date (left aligned, Swiss standard)

@@ -3,12 +3,12 @@
 [![Crates.io](https://img.shields.io/crates/v/briefli.svg)](https://crates.io/crates/briefli)
 [![License](https://img.shields.io/crates/l/briefli.svg)](https://github.com/samvdst/briefli#license)
 
-Swiss letter management CLI using [Typst](https://typst.app/). Create properly formatted letters that fit Swiss envelope windows (C5/C6 with left-side address window).
+Swiss letter management CLI using [Typst](https://typst.app/). Create properly formatted letters for Swiss C5 envelopes (A4 folded once) with left or right address windows.
 
 ## Features
 
 - 📬 Swiss standard letter format (SN 010130)
-- 📍 Address positioning for left-side envelope windows
+- 📍 Address positioning for left or right-side envelope windows
 - 👤 Multiple sender profiles (private/work)
 - 🔤 Typst-based templates for beautiful typography
 - 📦 Simple CLI for letter management
@@ -45,6 +45,10 @@ briefli init
 2. **Configure your sender info** in `defaults.toml`:
 
 ```toml
+location = "Zürich"
+lang = "de"
+address-position = "left"  # or "right"
+
 [sender.private]
 name = "Your Name"
 address = "Street 123, 8000 Zürich"
@@ -52,9 +56,6 @@ address = "Street 123, 8000 Zürich"
 [sender.work]
 name = "Your Name"
 address = "Company AG, Street 456, 8001 Zürich"
-
-place = "Zürich"
-lang = "de"
 ```
 
 3. **Create a new letter:**
@@ -85,15 +86,16 @@ briefli help                    # Show help
 
 ## Swiss Letter Format
 
-The template follows Swiss letter standards:
+For C5 envelopes (A4 folded once), the template uses these measurements:
 
-| Element           | Position      |
-| ----------------- | ------------- |
-| Left margin       | 22mm          |
-| Recipient address | 60mm from top |
-| Address window    | 85.5mm × 45mm |
+| Element              | Left Window   | Right Window  |
+| -------------------- | ------------- | ------------- |
+| Address from left    | 22mm          | 118mm         |
+| Address from top     | 60mm          | 60mm          |
+| Address area         | 85.5mm × 45mm | 85.5mm × 45mm |
+| Sender line from top | 45mm          | 45mm          |
 
-This ensures your letters fit perfectly in standard Swiss C5/C6 envelopes with the left-side address window.
+Use `address-position = "left"` (default) or `"right"` depending on your envelope's window position.
 
 ## File Structure
 
@@ -114,14 +116,15 @@ The `ch-letter-template.typ` can be customized. Available parameters:
   sender: (
     name: "Your Name",
     address: "Street, ZIP City",
-    extra: "phone/email",       // optional
+    extra: "phone/email",          // optional
   ),
   recipient: "Name, Company, Street, ZIP City",
   location: "Zürich",
   date: "15.01.2024",
   subject: "Letter Subject",
-  footer: [Optional footer],    // optional
-  font: "Arial",                // optional, default: Arial
+  footer: [Optional footer],       // optional
+  font: "Arial",                   // optional, default: Arial
+  address-position: "left",        // optional, "left" or "right"
 )
 ```
 
