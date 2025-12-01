@@ -10,6 +10,7 @@
   subject: none,
   footer: none,
   font: "Arial",
+  address-position: "left",
   body,
 ) = {
   // Swiss letter standard measurements
@@ -60,8 +61,9 @@
   // Sender as return address line (small, underlined, above address window)
   // Positioned at ~45mm from top (above the 60mm address window)
   if sender.name != none or sender.address != none or sender.at("extra", default: none) != none {
+    let sender-align = if address-position == "right" { top + right } else { top + left }
     place(
-      top + left,
+      sender-align,
       dy: 45mm - margin-top,
       {
         set text(size: 8pt)
@@ -83,8 +85,9 @@
   // Recipient block - absolutely positioned at 60mm from top
   // This ensures the address appears in the envelope window
   if recipient != none {
+    let recipient-align = if address-position == "right" { top + right } else { top + left }
     place(
-      top + left,
+      recipient-align,
       dy: address-top - margin-top,
       box(
         width: address-width,

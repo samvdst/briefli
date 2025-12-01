@@ -7,14 +7,19 @@ location = "Zürich"
 # Default language (de, fr, it, en)
 lang = "de"
 
+# Address position: "left" or "right" (default: left)
+address-position = "left"
+
 [sender.private]
 name = "Your Name"
 address = "Street 123, 8000 Zürich"
 # extra = "+41 79 123 45 67"  # Optional: phone, email, etc.
 # location = "Zürich"  # Optional: override global location
+# address-position = "left"  # Optional: override global position
 
 [sender.work]
 name = "Your Name"
 address = "Company AG, Street 456, 8001 Zürich"
 # extra = "your.email@company.ch"
 # location = "Zürich"  # Optional: override global location
+# address-position = "left"  # Optional: override global position

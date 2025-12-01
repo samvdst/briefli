@@ -1,7 +1,7 @@
 # briefli 🇨🇭
 
 [![Crates.io](https://img.shields.io/crates/v/briefli.svg)](https://crates.io/crates/briefli)
-[![License](https://img.shields.io/crates/l/briefli.svg)](https://github.com/yourusername/briefli#license)
+[![License](https://img.shields.io/crates/l/briefli.svg)](https://github.com/samvdst/briefli#license)
 
 Swiss letter management CLI using [Typst](https://typst.app/). Create properly formatted letters that fit Swiss envelope windows (C5/C6 with left-side address window).
 
@@ -24,7 +24,7 @@ cargo install briefli
 ### From source
 
 ```bash
-git clone https://github.com/yourusername/briefli
+git clone https://github.com/samvdst/briefli
 cd briefli
 cargo install --path .
 ```

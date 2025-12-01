@@ -9,6 +9,8 @@ struct Defaults {
     sender: Option<SenderProfiles>,
     location: Option<String>,
     lang: Option<String>,
+    #[serde(rename = "address-position")]
+    address_position: Option<String>,
 }
 
 #[derive(Deserialize, Default)]
@@ -23,6 +25,8 @@ struct Sender {
     address: Option<String>,
     extra: Option<String>,
     location: Option<String>,
+    #[serde(rename = "address-position")]
+    address_position: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -142,17 +146,22 @@ location = "Zürich"
 # Default language (de, fr, it, en)
 lang = "de"
 
+# Address position: "left" or "right" (default: left)
+address-position = "left"
+
 [sender.private]
 name = "Your Name"
 address = "Street 123, 8000 Zürich"
 # extra = "+41 79 123 45 67"  # Optional: phone, email, etc.
 # location = "Zürich"  # Optional: override global location
+# address-position = "left"  # Optional: override global position
 
 [sender.work]
 name = "Your Name"
 address = "Company AG, Street 456, 8001 Zürich"
 # extra = "your.email@company.ch"
 # location = "Zürich"  # Optional: override global location
+# address-position = "left"  # Optional: override global position
 "#;
         fs::write(defaults_path, defaults_content).expect("Failed to write defaults");
         println!("Created: defaults.toml");
@@ -190,6 +199,13 @@ fn new_letter(name: &str, profile: Profile) {
         .and_then(|s| s.location.clone())
         .or_else(|| defaults.location.clone())
         .unwrap_or_else(|| "Zürich".to_string());
+
+    // Use profile-specific address-position if set, otherwise fall back to global (default: left)
+    let address_position = sender
+        .as_ref()
+        .and_then(|s| s.address_position.clone())
+        .or_else(|| defaults.address_position.clone())
+        .unwrap_or_else(|| "left".to_string());
 
     // Build sender block
     let sender_block = if let Some(s) = &sender {
@@ -230,6 +246,7 @@ fn new_letter(name: &str, profile: Profile) {
   location: "{location}",
   date: "{display_date}",
   subject: "{subject}",
+  address-position: "{address_position}",
 )
 
 Sehr geehrte Damen und Herren
@@ -246,6 +263,7 @@ Freundliche Grüsse
         location = location,
         display_date = display_date,
         subject = name,
+        address_position = address_position,
         sender_name = sender_name,
     );
 
