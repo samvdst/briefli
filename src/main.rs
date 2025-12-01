@@ -7,7 +7,7 @@ const TEMPLATE_CONTENT: &str = include_str!("../ch-letter-template.typ");
 #[derive(Deserialize, Default)]
 struct Defaults {
     sender: Option<SenderProfiles>,
-    place: Option<String>,
+    location: Option<String>,
     lang: Option<String>,
 }
 
@@ -22,6 +22,7 @@ struct Sender {
     name: Option<String>,
     address: Option<String>,
     extra: Option<String>,
+    location: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -135,21 +136,23 @@ fn init_directory() {
         let defaults_content = r#"# Default values for new letters
 # Edit these to match your details
 
+# Default location for the date line
+location = "Zürich"
+
+# Default language (de, fr, it, en)
+lang = "de"
+
 [sender.private]
 name = "Your Name"
 address = "Street 123, 8000 Zürich"
 # extra = "+41 79 123 45 67"  # Optional: phone, email, etc.
+# location = "Zürich"  # Optional: override global location
 
 [sender.work]
 name = "Your Name"
 address = "Company AG, Street 456, 8001 Zürich"
 # extra = "your.email@company.ch"
-
-# Default place for the date line
-place = "Zürich"
-
-# Default language (de, fr, it, en)
-lang = "de"
+# location = "Zürich"  # Optional: override global location
 "#;
         fs::write(defaults_path, defaults_content).expect("Failed to write defaults");
         println!("Created: defaults.toml");
@@ -179,11 +182,14 @@ fn new_letter(name: &str, profile: Profile) {
     }
 
     let lang = defaults.lang.clone().unwrap_or_else(|| "de".to_string());
-    let place = defaults
-        .place
-        .clone()
-        .unwrap_or_else(|| "Zürich".to_string());
     let sender = get_sender(&defaults, profile);
+
+    // Use profile-specific location if set, otherwise fall back to global location
+    let location = sender
+        .as_ref()
+        .and_then(|s| s.location.clone())
+        .or_else(|| defaults.location.clone())
+        .unwrap_or_else(|| "Zürich".to_string());
 
     // Build sender block
     let sender_block = if let Some(s) = &sender {
@@ -221,7 +227,7 @@ fn new_letter(name: &str, profile: Profile) {
 {sender_block}
   recipient: "",
 
-  location: "{place}",
+  location: "{location}",
   date: "{display_date}",
   subject: "{subject}",
 )
@@ -237,7 +243,7 @@ Freundliche Grüsse
 "#,
         lang = lang,
         sender_block = sender_block,
-        place = place,
+        location = location,
         display_date = display_date,
         subject = name,
         sender_name = sender_name,

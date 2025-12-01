@@ -1,18 +1,20 @@
 # Default values for new letters
 # Edit these to match your details
 
+# Default location for the date line
+location = "Zürich"
+
+# Default language (de, fr, it, en)
+lang = "de"
+
 [sender.private]
 name = "Your Name"
 address = "Street 123, 8000 Zürich"
 # extra = "+41 79 123 45 67"  # Optional: phone, email, etc.
+# location = "Zürich"  # Optional: override global location
 
 [sender.work]
 name = "Your Name"
 address = "Company AG, Street 456, 8001 Zürich"
 # extra = "your.email@company.ch"
-
-# Default place for the date line
-place = "Zürich"
-
-# Default language (de, fr, it, en)
-lang = "de"
+# location = "Zürich"  # Optional: override global location
