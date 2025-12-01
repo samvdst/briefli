@@ -1,0 +1,18 @@
+# Default values for new letters
+# Edit these to match your details
+
+[sender.private]
+name = "Your Name"
+address = "Street 123, 8000 Zürich"
+# extra = "+41 79 123 45 67"  # Optional: phone, email, etc.
+
+[sender.work]
+name = "Your Name"
+address = "Company AG, Street 456, 8001 Zürich"
+# extra = "your.email@company.ch"
+
+# Default place for the date line
+place = "Zürich"
+
+# Default language (de, fr, it, en)
+lang = "de"

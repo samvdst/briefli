@@ -1,0 +1,23 @@
+[package]
+name = "briefli"
+version = "0.1.0"
+edition = "2024"
+authors = ["Samuel Van der Stappen <shogun_einst.0i@icloud.com>"]
+description = "Swiss letter management CLI using Typst - create properly formatted letters for Swiss envelope windows"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/samvdst/briefli"
+homepage = "https://github.com/samvdst/briefli"
+documentation = "https://github.com/samvdst/briefli#readme"
+readme = "README.md"
+keywords = ["swiss", "letter", "typst", "cli", "template"]
+categories = ["command-line-utilities", "text-processing"]
+exclude = ["*.pdf", "defaults.toml", "20*.typ"]
+
+[[bin]]
+name = "briefli"
+path = "src/main.rs"
+
+[dependencies]
+chrono = "0.4"
+toml = "0.9"
+serde = { version = "1.0", features = ["derive"] }
