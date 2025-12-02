@@ -139,4 +139,4 @@ at your option.
 
 ## Contributing
 
-Contributions welcome! Please feel free to submit a Pull Request.
+I'm building this for my personal use case, but if you have a cool feature idea, I'm open to hear all about it. PRs always welcome!
