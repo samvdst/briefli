@@ -1,6 +1,6 @@
 [package]
 name = "briefli"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 authors = ["Samuel Van der Stappen <shogun_einst.0i@icloud.com>"]
 description = "Swiss letter management CLI using Typst - create properly formatted letters for Swiss envelope windows"
